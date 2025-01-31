@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emoji Cursor Trail</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            cursor: none; /* Hide the default cursor */
+        }
+    </style>
+</head>
+<body>
+    <script>
+        // Array of emojis to choose from
+        const emojis = ['🖕','🖕','🖕','🖕','🖕','🖕'];
+        const colors = ['#FF6347', '#32CD32', '#1E90FF', '#FFD700', '#8A2BE2'];
+        let colorIndex = 0;
+        let emojiIndex = 0;
+
+        // Function to get the next color
+        function getNextColor() {
+            colorIndex = (colorIndex + 1) % colors.length;
+            return colors[colorIndex];
+        }
+
+        // Function to get the next emoji
+        function getNextEmoji() {
+            emojiIndex = (emojiIndex + 1) % emojis.length;
+            return emojis[emojiIndex];
+        }
+
+        // Listen for mouse movements
+        document.addEventListener('mousemove', (e) => {
+            // Create an emoji element
+            const emojiElement = document.createElement('span');
+            emojiElement.textContent = getNextEmoji(); // Set the emoji
+            emojiElement.style.position = 'absolute';
+            emojiElement.style.left = `${e.clientX}px`;
+            emojiElement.style.top = `${e.clientY}px`;
+            emojiElement.style.fontSize = '30px';
+            emojiElement.style.color = getNextColor(); // Set the color
+            emojiElement.style.pointerEvents = 'none'; // Prevent interaction with the emoji
+
+            // Append the emoji to the body
+            document.body.appendChild(emojiElement);
+
+            // Remove the emoji after a short delay to avoid cluttering the screen
+            setTimeout(() => {
+                emojiElement.remove();
+            }, 1000); // Emoji will disappear after 1 second
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expanding Prison Animation</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: black;
+      color: white;
+      font-family: 'Arial', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    .container {
+      position: relative;
+      width: 100vmin;
+      height: 100vmin;
+      border-radius: 50%;
+      overflow: hidden;
+    }
+
+    .concentric-circles {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: repeating-radial-gradient(
+        circle,
+        orange 0%,
+        orange 1%,
+        transparent 2%
+      );
+      animation: rotate 15s linear infinite;
+    }
+
+    @keyframes rotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .moving-ball {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: white;
+      border-radius: 50%;
+      animation: ballMove 3s linear infinite;
+    }
+
+    @keyframes ballMove {
+      0% {
+        transform: translate(50%, 50%);
+      }
+      100% {
+        transform: translate(220px, 220px);
+      }
+    }
+
+    .text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      font-size: 24px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="concentric-circles"></div>
+    <div class="moving-ball"></div>
+    <div class="text">WILL THE BALL ESCAPE THE EXPANDING PRISON?</div>
+  </div>
+</body>
+</html>

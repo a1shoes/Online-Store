@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Color Line Drawing</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+
+    <script>
+        // Set up the canvas
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        // Array of colors to use
+        const colors = ['#FF6347', '#32CD32', '#1E90FF', '#FFD700', '#8A2BE2'];
+        let colorIndex = 0;
+
+        // Track the previous mouse position
+        let prevX = -1;
+        let prevY = -1;
+
+        // Function to change the color
+        function getNextColor() {
+            colorIndex = (colorIndex + 1) % colors.length;
+            return colors[colorIndex];
+        }
+
+        // Function to draw line
+        function drawLine(x, y) {
+            if (prevX === -1 && prevY === -1) {
+                prevX = x;
+                prevY = y;
+                return;
+            }
+
+            ctx.beginPath();
+            ctx.moveTo(prevX, prevY);
+            ctx.lineTo(x, y);
+            ctx.strokeStyle = getNextColor();
+            ctx.lineWidth = 5;
+            ctx.stroke();
+
+            prevX = x;
+            prevY = y;
+        }
+
+        // Listen to the mousemove event
+        canvas.addEventListener('mousemove', (e) => {
+            drawLine(e.clientX, e.clientY);
+        });
+
+        // Reset the drawing when mouse is clicked
+        canvas.addEventListener('click', () => {
+            prevX = -1;
+            prevY = -1;
+        });
+    </script>
+</body>
+</html>

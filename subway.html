@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Subway Surfer Game</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: #f0f0f0;
+        }
+        canvas {
+            display: block;
+            background: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas"></canvas>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const player = {
+            x: canvas.width / 2,
+            y: canvas.height - 100,
+            width: 50,
+            height: 50,
+            speed: 5,
+            color: 'blue'
+        };
+
+        const obstacles = [];
+        let gameInterval;
+        let obstacleSpeed = 5;
+        let isGameOver = false;
+
+        // Controls
+        let moveLeft = false;
+        let moveRight = false;
+
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') moveLeft = true;
+            if (e.key === 'ArrowRight') moveRight = true;
+        });
+
+        window.addEventListener('keyup', (e) => {
+            if (e.key === 'ArrowLeft') moveLeft = false;
+            if (e.key === 'ArrowRight') moveRight = false;
+        });
+
+        // Create obstacles
+        function createObstacle() {
+            const width = Math.random() * 100 + 50;
+            const x = Math.random() * (canvas.width - width);
+            const obstacle = {
+                x,
+                y: -50,
+                width,
+                height: 50,
+                color: 'red'
+            };
+            obstacles.push(obstacle);
+        }
+
+        // Draw player
+        function drawPlayer() {
+            ctx.fillStyle = player.color;
+            ctx.fillRect(player.x, player.y, player.width, player.height);
+        }
+
+        // Draw obstacles
+        function drawObstacles() {
+            obstacles.forEach((obstacle, index) => {
+                ctx.fillStyle = obstacle.color;
+                ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+
+                // Move obstacles down
+                obstacle.y += obstacleSpeed;
+
+                // Check for collision with player
+                if (obstacle.y + obstacle.height > player.y &&
+                    obstacle.x < player.x + player.width &&
+                    obstacle.x + obstacle.width > player.x) {
+                    isGameOver = true;
+                    clearInterval(gameInterval);
+                    alert('Game Over! Refresh to Play Again');
+                }
+
+                // Remove obstacles that are off-screen
+                if (obstacle.y > canvas.height) {
+                    obstacles.splice(index, 1);
+                }
+            });
+        }
+
+        // Move player
+        function movePlayer() {
+            if (moveLeft && player.x > 0) player.x -= player.speed;
+            if (moveRight && player.x + player.width < canvas.width) player.x += player.speed;
+        }
+
+        // Game loop
+        function gameLoop() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            if (!isGameOver) {
+                movePlayer();
+                drawPlayer();
+                drawObstacles();
+            }
+        }
+
+        // Generate obstacles at intervals
+        function startGame() {
+            gameInterval = setInterval(gameLoop, 20);
+
+            setInterval(() => {
+                if (!isGameOver) createObstacle();
+            }, 2000); // Create an obstacle every 2 seconds
+        }
+
+        startGame();
+    </script>
+</body>
+</html>

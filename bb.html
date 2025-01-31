@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Catch Me If You Can Button</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background-color: #f1f1f1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    button {
+      padding: 20px 40px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      background-color: #ff6347;
+      border: none;
+      border-radius: 30px;
+      color: white;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      transition: transform 0.15s ease, background-color 0.2s, box-shadow 0.2s;
+    }
+
+    button:hover {
+      background-color: #ff4500;
+    }
+
+  </style>
+</head>
+<body>
+
+  <button id="moveButton">Catch Me!</button>
+
+  <script>
+    const button = document.getElementById('moveButton');
+    
+    // Get the screen width and height
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
+
+    document.addEventListener('mousemove', (e) => {
+      const buttonRect = button.getBoundingClientRect();
+      const buttonCenterX = buttonRect.left + buttonRect.width / 2;
+      const buttonCenterY = buttonRect.top + buttonRect.height / 2;
+
+      const distanceX = e.clientX - buttonCenterX;
+      const distanceY = e.clientY - buttonCenterY;
+
+      const moveAwayDistance = 100; // Adjust how far the button moves
+      const moveX = distanceX > 0 ? -moveAwayDistance : moveAwayDistance;
+      const moveY = distanceY > 0 ? -moveAwayDistance : moveAwayDistance;
+
+      button.style.transform = `translate(${moveX}px, ${moveY}px)`;
+
+      // Change button's color dynamically based on mouse distance
+      const distanceFromCursor = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+      const maxDistance = Math.sqrt(screenWidth * screenWidth + screenHeight * screenHeight);
+      const colorValue = Math.min(255, Math.floor((distanceFromCursor / maxDistance) * 255));
+      button.style.backgroundColor = `rgb(${255 - colorValue}, ${99 + colorValue}, ${71})`; // Change red-to-orange color
+    });
+  </script>
+
+</body>
+</html>
